@@ -63,17 +63,17 @@ if __name__ == "__main__":
     tenant_id = 1
     for _ in range(100):
         priority = calculate_priority(tenant_id)
+        key = f"tenant:{tenant_id}:task_count"
+        redis_client.incr(key, 1)
         send_email.apply_async(
             kwargs={"tenant_id": tenant_id, "task_data": {}}, priority=priority
         )
-        key = f"tenant:{tenant_id}:task_count"
-        redis_client.incr(key, 1)
 
     tenant_id = 2
     for _ in range(10):
         priority = calculate_priority(tenant_id)
+        key = f"tenant:{tenant_id}:task_count"
+        redis_client.incr(key, 1)
         send_email.apply_async(
             kwargs={"tenant_id": tenant_id, "task_data": {}}, priority=priority
         )
-        key = f"tenant:{tenant_id}:task_count"
-        redis_client.incr(key, 1)
